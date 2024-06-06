@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboards.css') }}">
+        <script src="https://kit.fontawesome.com/1e94604817.js" crossorigin="anonymous"></script>
+        
+        <title>Manager_dashboard</title>
+        <style >
+            .section {
+                display: none;
+            }
+            .section.active {
+                display: block;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <!-- SIDEBAR -->
+        <section id="sidebar">
+            <a class="brand" href="{{ url_for('index') }}">Car<span>Booking</span></a>
+
+            <ul class="side-menu top">
+                <li>
+                    <a href="{{ url_for('dashboard_manager') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Tableau de bord</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('cars') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Voitures</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('clients') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Clients</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="{{ url_for('add_reservation') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Ajout réservation</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('reservations') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Réservations</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('manager_history') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Historique</span>
+                    </a>
+                </li>
+            </ul>
+            <ul class="side-menu">
+                <li>
+                    <a href="{{ url_for('logout') }}" class="menu-item logout" data-target="settings-section">
+                        <span class="text" style="margin-left: 50px;">Se déconnecter</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+        <!-- SIDEBAR -->
+
+
+        <!-- CONTENT -->
+        <section id="content">
+            <!-- NAVBAR -->
+            <nav>
+                <form action="#" style="margin-left: 22%;">
+                </form>
+            </nav>
+            <!-- NAVBAR -->
+
+            <!-- MAIN -->
+            <main>
+               
+                <div id="reclamations-section" class="section active">
+                    <h1 style="font-size: 24px; color: #333;  text-align:center;">Ajout d'une réservation</h1> </br>
+                    <div class="container">
+                        <form method="POST" action="{{ url_for('add_reserv') }}">
+                            <div class="form-group">
+                                <label for="car_id">ID_VOITURE</label>
+                                <select id="car_id" name="car_id">
+                                    {% for car in cars %}
+                                        <option value="{{ car._id }}">{{ car._id }} - {{ car.model }} {{ car.year }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="client_id">ID_CLIENT</label>
+                                <select id="client_id" name="client_id">
+                                    {% for client in clients %}
+                                        <option value="{{ client._id }}">{{ client._id }} - {{ client.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>                       
+                            <div class="form-group">
+                                <label for="start_date">DATE DEBUT LOCATION</label>
+                                <input type="date" id="start_date" name="start_date">
+                            </div>
+                            <div class="form-group">
+                                <label for="end_date">DATE FIN LOCATION</label>
+                                <input type="date" id="end_date" name="end_date">
+                            </div>
+                            {% if reservation_error %}
+                                </br>
+                                <div class="error" style="color: red;">{{ reservation_error }}</div>
+                            {% endif %}
+                            <input type="submit" value="Ajouter">
+                        </form>
+                        
+                    </div>  
+                </div>
+
+
+            </main>
+        </section>
+        <!-- CONTENT -->
+
+            
+    </body>
+</html>
+        

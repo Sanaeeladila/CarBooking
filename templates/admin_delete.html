@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboards.css') }}">
+        <title>Admin_dashboard</title>
+        <style >
+            .section {
+                display: none;
+            }
+            .section.active {
+                display: block;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <!-- SIDEBAR -->
+        <section id="sidebar">
+
+            <a class="brand" href="{{ url_for('index') }}">Car<span>Booking</span></a>
+            
+            <ul class="side-menu top">
+                <li>
+                    <a href="{{ url_for('admin_dashboard') }}" class="menu-item" data-target="dashboard-section">
+                        <span class="text" style="margin-left: 50px;">Tableau de bord</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('admin_view') }}" class="menu-item" data-target="clients-section">
+                        <span class="text" style="margin-left: 50px;">Voir Utilisateur</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('admin_add') }}" class="menu-item" data-target="reclamations-section">
+                        <span class="text" style="margin-left: 50px;">Ajouter Utilisateur</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="#" class="menu-item" data-target="message-section">
+                        <span class="text" style="margin-left: 50px;">Supprimer Utilisateur</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('admin_history') }}" class="menu-item" data-target="comments-section">
+                        <span class="text" style="margin-left: 50px;">Historique</span>
+                    </a>
+                </li>
+            </ul>
+            <ul class="side-menu">
+                <li>
+                    <a href="{{ url_for('logout') }}" class="menu-item logout" data-target="settings-section">
+                        <span class="text" style="margin-left: 50px;">Se déconnecter</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+        <!-- SIDEBAR -->
+
+        <!-- CONTENT -->
+        <section id="content">
+            <!-- NAVBAR -->
+            <nav>
+                <form action="#" style="margin-left: 22%;">
+                </form>  
+            </nav>
+            <!-- NAVBAR -->
+
+            <!-- MAIN -->
+            <main>
+
+                <div id="message-section" class="section active">
+                    <h1 style="font-size: 24px; color: #333; margin-bottom: 20px; text-align:center;">Suppression d'un utilisateur</h1>
+                    <div class="container">
+                        <table>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>cree le</th>
+                                <th>Traitement</th>
+                            </tr>
+                            
+                                {% for user in users %}
+                                {% if user.state == 'active' %}
+                                <tr>
+                                    <td>{{ user.name }}</td>
+                                    <td>{{ user.email }}</td>
+                                    <td>{{ user.role }}</td>
+                                    <td>{{ user.created_at }}</td>
+                                    <td>
+                                        <button onclick="deleteUser('{{ user._id }}')">Supprimer</button>    
+                                    </td>
+                                </tr>
+                                {% endif %}
+                                {% endfor %} 
+                            
+                        </table>
+                    </div>
+                </div>
+               
+            </main>
+        </section>
+        <!-- CONTENT -->
+
+        <script>
+            function deleteUser(userId) {
+                // Envoyer une demande AJAX pour mettre à jour l'état de l'utilisateur à "deleted"
+                fetch('/delete_user/' + userId, {
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Recharger la page après la suppression
+                        window.location.reload();
+                    } else {
+                        console.error('Erreur lors de la mise à jour de l\'état de l\'utilisateur.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur réseau :', error);
+                });
+            }
+        </script>
+        
+
+    </body>
+</html>

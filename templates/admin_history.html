@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboards.css') }}">
+        <title>Admin_dashboard</title>
+    </head>
+    <body>
+        
+        <!-- SIDEBAR -->
+        <section id="sidebar">
+
+            <a class="brand" href="{{ url_for('index') }}">Car<span>Booking</span></a>
+            
+            <ul class="side-menu top">
+                <li>
+                    <a href="{{ url_for('admin_dashboard') }}"  class="menu-item" data-target="dashboard-section">
+                        <span class="text" style="margin-left: 50px;">Tableau de bord</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('admin_view') }}" class="menu-item" data-target="clients-section">
+                        <span class="text" style="margin-left: 50px;">Voir Utilisateur</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('admin_add') }}" class="menu-item" data-target="reclamations-section">
+                        <span class="text" style="margin-left: 50px;">Ajouter Utilisateur</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('admin_delete') }}" class="menu-item" data-target="message-section">
+                        <span class="text" style="margin-left: 50px;">Supprimer Utilisateur</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="#" class="menu-item" data-target="comments-section">
+                        <span class="text" style="margin-left: 50px;">Historique</span>
+                    </a>
+                </li>
+            </ul>
+            <ul class="side-menu">
+                <li>
+                    <a href="{{ url_for('logout') }}" class="menu-item logout" data-target="settings-section">
+                        <span class="text" style="margin-left: 50px;">Se déconnecter</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+        <!-- SIDEBAR -->
+
+        <!-- CONTENT -->
+        <section id="content">
+            <!-- NAVBAR -->
+            <nav>
+                <form action="#" style="margin-left: 22%;">
+                </form>  
+            </nav>
+            <!-- NAVBAR -->
+
+            <!-- MAIN -->
+            <main>
+                
+
+                <div id="comments-section" class="section active">
+                    <h1 style="font-size: 24px; color: #333; margin-bottom: 20px; text-align:center;">Utilisateurs supprimés</h1>
+                    <div class="container">
+                        <table>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Etat</th>
+                            </tr>
+                            {% for user in deleted_users %}
+                                <tr>
+                                    <td>{{ user.name }}</td>
+                                    <td>{{ user.email }}</td>
+                                    <td>{{ user.role }}</td>
+                                    <td>Supprimé</td>
+                                </tr>
+                            {% endfor %}  
+                        </table>
+                    </div>
+                </div>
+
+                
+            </main>
+        </section>
+        <!-- CONTENT -->
+
+
+    </body>
+</html>

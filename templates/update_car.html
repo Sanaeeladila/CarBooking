@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboards.css') }}">
+        <script src="https://kit.fontawesome.com/1e94604817.js" crossorigin="anonymous"></script>        
+        <title>Manager_dashboard</title>
+    </head>
+    <body>
+        
+        <!-- SIDEBAR -->
+        <section id="sidebar">
+            <a class="brand" href="{{ url_for('index') }}">Car<span>Booking</span></a>
+
+            <ul class="side-menu top">
+                <li>
+                    <a href="{{ url_for('dashboard_manager') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Tableau de bord</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="{{ url_for('cars') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Voitures</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('clients') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Clients</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('add_reservation') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Ajout réservation</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('reservations') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Réservations</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('manager_history') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Historique</span>
+                    </a>
+                </li>
+            </ul>
+            <ul class="side-menu">
+                <li>
+                    <a href="{{ url_for('logout') }}" class="menu-item logout" data-target="settings-section">
+                        <span class="text" style="margin-left: 50px;">Se déconnecter</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+        <!-- SIDEBAR -->
+
+
+        <!-- CONTENT -->
+        <section id="content">
+            <!-- NAVBAR -->
+            <nav>
+                <form action="#" style="margin-left: 22%;">
+                </form>  
+            </nav>
+            <!-- NAVBAR -->
+
+            <!-- MAIN -->
+            <main>
+                <!-- Autres sections de contenu -->
+                                
+                <div id="newCar-section" class="section active">
+                    <h1 style="font-size: 24px; color: #333;  text-align:center;">Modifier la voiture</h1>
+                    <div class="container">
+                        <form action="{{ url_for('update_car') }}" method="POST" enctype="multipart/form-data">
+                            
+                            <input type="hidden" name="id" value="{{ car._id }}">
+                            <div class="form-group">
+                                <label for="brand">BRAND</label>
+                                <input type="text" id="brand" name="brand" value="{{ car.brand }}"> 
+                            </div>
+                            <div class="form-group">
+                                <label for="model">MODEL</label>
+                                <input type="text" id="model" name="model" value="{{ car.model }}" >
+                            </div>
+                            <div class="form-group">
+                                <label for="year">YEAR</label>
+                                <input type="text" id="year" name="year" value="{{ car.year }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="color">COLOR</label>
+                                <input type="text" id="color" name="color" value="{{ car.color }}">
+                            </div>                            
+                            <div class="form-group">
+                                <label for="mileage">MILEAGE</label>
+                                <input type="text" id="mileage" name="mileage" value="{{ car.mileage }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="price">PRICE</label>
+                                <input type="number" id="price" name="price" value="{{ car.price }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="picture">PICTURE</label>
+                                <input type="file" id="picture" name="picture">
+                            </div>
+                            <div class="form-group">
+                                <label for="status">STATUS</label>
+                                <select id="status" name="status">
+                                    <option value="available">Available</option>
+                                    <option value="navailable">Not available</option>
+                                </select>
+                            </div> 
+                            {% if updatecar_error %}
+                                </br>
+                                <p style="color: red;">{{ updatecar_error }}</p>
+                            {% endif %}
+                            {% if updatecar_valid %}
+                                </br>
+                                <p style="color: green;">{{ updatecar_valid }}</p>
+                            {% endif %}
+                            <input type="submit" value="Modifier">
+                        </form>
+                    </div>                    
+                </div>
+            </main>
+        </section>
+        <!-- CONTENT -->
+
+    </body>
+</html>

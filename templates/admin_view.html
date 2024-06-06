@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboards.css') }}">
+        <title>Admin_dashboard</title>
+        <style >
+            .card-container1 {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 25px; 
+                padding: 10px; 
+            }
+        </style>
+    </head>
+    <body>
+        
+        <!-- SIDEBAR -->
+        <section id="sidebar">
+
+            <a class="brand" href="{{ url_for('index') }}">Car<span>Booking</span></a>
+            
+            <ul class="side-menu top">
+                <li>
+                    <a href="{{ url_for('admin_dashboard') }}" class="menu-item" data-target="dashboard-section">
+                        <span class="text" style="margin-left: 50px;">Tableau de bord</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="#" class="menu-item" data-target="clients-section">
+                        <span class="text" style="margin-left: 50px;">Voir Utilisateur</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('admin_add') }}" class="menu-item" data-target="reclamations-section">
+                        <span class="text" style="margin-left: 50px;">Ajouter Utilisateur</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('admin_delete') }}" class="menu-item" data-target="message-section">
+                        <span class="text" style="margin-left: 50px;">Supprimer Utilisateur</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('admin_history') }}" class="menu-item" data-target="comments-section">
+                        <span class="text" style="margin-left: 50px;">Historique</span>
+                    </a>
+                </li>
+            </ul>
+            <ul class="side-menu">
+                <li>
+                    <a href="{{ url_for('logout') }}" class="menu-item logout" data-target="settings-section">
+                        <span class="text" style="margin-left: 50px;">Se déconnecter</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+        <!-- SIDEBAR -->
+
+        <!-- CONTENT -->
+        <section id="content">
+            <!-- NAVBAR -->
+            <nav>
+                <form action="#" style="margin-left: 22%;">
+                </form>               
+            </nav>
+            <!-- NAVBAR -->
+
+            <!-- MAIN -->
+            <main>               
+
+                <!-- Autres sections de contenu -->
+                <div id="clients-section" class="section active">
+
+                    <h1 style="font-size: 24px; color: #333; margin-bottom: 20px; text-align:center;">Liste des utilisateurs</h1>
+                    <input type="text" id="searchInput" onkeyup="search()" placeholder="Rechercher un manager/admin..." style="margin-left:25% ; width: 50%; padding: 10px; border: 1px solid #ccc; border-radius: 9px;"> </br> </br>
+                    <div class="card-container1">
+                        {% for user in users %}
+                            <div class="card1 category-link" data-service="review{{ loop.index }}">
+                                <p class="title_card1">{{ user.name }}</p>
+                                <p class="parag_card1">Rôle: {{ user.role }}</p>
+                                <p class="title_card1"> Contact</p>
+                                <p class="parag_card1">{{ user.email }}</p>
+                                <div style="display: flex; align-items: center;">
+                                    <p class="parag_card1">Créé le </p>
+                                    <p class="parag_card1" style="margin-left: 25px;">{{ user.created_at}}</p>
+                                </div>
+                            </div>
+                        {% endfor %}    
+                    </div>
+
+                </div>
+               
+            </main>
+        </section>
+        <!-- CONTENT -->
+
+        <script>
+            function search() {
+                // Récupérer la valeur saisie dans le champ de recherche
+                var input = document.getElementById("searchInput");
+                var filter = input.value.toUpperCase();
+                // Récupérer toutes les cartes des managers
+                var cards = document.getElementsByClassName("card1");
+                // Parcourir chaque carte et afficher ou masquer en fonction du filtre
+                for (var i = 0; i < cards.length; i++) {
+                    var card = cards[i];
+                    var title = card.querySelector(".title_card1");
+                    var txtValue = title.textContent || title.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        card.style.display = "";
+                    } else {
+                        card.style.display = "none";
+                    }
+                }
+            }
+        </script>
+
+    </body>
+</html>

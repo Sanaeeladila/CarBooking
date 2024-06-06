@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboards.css') }}">
+        <script src="https://kit.fontawesome.com/1e94604817.js" crossorigin="anonymous"></script>
+        
+        <title>Manager_dashboard</title>
+        <style >
+            .section {
+                display: none;
+            }
+            .section.active {
+                display: block;
+            }
+            select {
+                width: 25%;
+                /*padding: 10px 20px; 
+                border: 1.5px solid #000000;
+                box-sizing: border-box; */
+                padding: 10px; border: 1px solid #ccc; border-radius: 9px;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <!-- SIDEBAR -->
+        <section id="sidebar">
+            <a class="brand" href="{{ url_for('index') }}">Car<span>Booking</span></a>
+
+            <ul class="side-menu top">
+                <li>
+                    <a href="{{ url_for('dashboard_manager') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Tableau de bord</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('cars') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Voitures</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('clients') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Clients</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('add_reservation') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Ajout réservation</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('reservations') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Réservations</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="#" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Historique</span>
+                    </a>
+                </li>
+
+
+            </ul>
+            <ul class="side-menu">
+                <li>
+                    <a href="{{ url_for('logout') }}" class="menu-item logout" data-target="settings-section">
+                        <span class="text" style="margin-left: 50px;">Se déconnecter</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+        <!-- SIDEBAR -->
+
+        <!-- CONTENT -->
+        <section id="content">
+            <!-- NAVBAR -->
+            <nav>
+                <form action="#" style="margin-left: 22%;">
+                </form>  
+            </nav>
+            <!-- NAVBAR -->
+
+            <!-- MAIN -->
+            <main>
+                <div id="comments-section" class="section active">
+                    <input type="text" id="searchInput" onkeyup="search()" placeholder="Recherche..." style="width: 50%; padding: 10px; border: 1px solid #ccc; border-radius: 9px; margin-left: 90px;">
+                    <!-- Dropdown for filtering -->
+                    <select id="filterSelect" onchange="filterData()">
+                        <option value="reservation" selected>Réservations</option>
+                        <option value="deleted_cars">Voitures supprimées</option>
+                        <option value="deleted_clients">Clients supprimés</option>
+                    </select> </br>
+
+                    <div class="container"  id="reservationTable">
+                        <h1 id="reservationTitle" style="font-size: 24px; color: #333; margin-bottom: 20px; text-align:center;">Réservations traitées</h1>
+                                                    
+                        <table>
+                            <tr style="font-size: 13px;">
+                                <th>id_voiture</th>
+                                <th>id_client</th>
+                                <th>date_reservation</th>
+                                <th>debut_location</th>
+                                <th>fin_location</th>
+                                <th>statut</th>
+                                <th>raison</th>
+                            </tr>
+                            {% for reservation in reservations %}
+                            <tr>
+                                <td style="font-size: 13px;">{{ reservation.car_id }}</td>
+                                <td style="font-size: 13px;">{{ reservation.client_id }}</td>
+                                <td style="font-size: 13px;">{{ reservation.reservation_date }}</td>
+                                <td style="font-size: 13px;">{{ reservation.start_date }}</td>
+                                <td style="font-size: 13px;">{{ reservation.end_date }}</td>  
+                                <td style="font-size: 13px;">{{ reservation.status }}</td> 
+                                {% if reservation.status == 'refusée' %}
+                                <td style="font-size: 13px;">{{ reservation.reason }}</td>
+                                {% else %}
+                                <td style="font-size: 13px;">-</td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %} 
+                        </table>
+                    </div>
+
+                    <div class="container" id="deletedCarsTable">
+                        <h1 id="deletedCarsTitle" style="font-size: 24px; color: #333; margin-bottom: 20px; text-align:center;">Voitures supprimées</h1>
+                
+                                            
+                        <table >
+                            <tr style="font-size: 13px;">
+                                <th>id_voiture</th>
+                                <th>model</th>
+                                <th>year</th>
+                                <th>color</th>
+                                <th>mileage</th>
+                                <th>price</th>
+                            </tr>
+                            {% for car in cars %}
+                            <tr>
+                                <td style="font-size: 13px;">{{car._id}}</td>
+                                <td style="font-size: 13px;">{{car.model}}</td>
+                                <td style="font-size: 13px;">{{car.year}}</td>
+                                <td style="font-size: 13px;">{{car.color}}</td>
+                                <td style="font-size: 13px;">{{car.mileage}}</td>
+                                <td style="font-size: 13px;">{{car.price}}</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+
+                    <div class="container" id="deletedClientsTable">
+                        <h1 id="deletedClientsTitle" style="font-size: 24px; color: #333; margin-bottom: 20px; text-align:center;">Clients supprimées</h1>                    
+                        
+                        <table >
+                            <tr style="font-size: 13px;">
+                                <th>id_client</th>
+                                <th>nom</th>
+                                <th>adresse</th>
+                                <th>email</th>
+                                <th>CIN</th>
+                                <th>Tel</th>
+                            </tr>
+                            {% for client in clients %}
+                            <tr>
+                                <td style="font-size: 13px;">{{client._id}}</td>
+                                <td style="font-size: 13px;">{{client.name}}</td>
+                                <td style="font-size: 13px;">{{client.address}}</td>
+                                <td style="font-size: 13px;">{{client.email}}</td>
+                                <td style="font-size: 13px;">{{client.CIN}}</td>
+                                <td style="font-size: 13px;">{{client.phone}}
+                            </tr>
+                            {% endfor %}
+                            
+                        </table>
+                    </div>
+                </div>
+                
+                
+            </main>
+        </section>
+        <!-- CONTENT -->
+
+        <script>
+            // Masquer tous les tableaux sauf celui des réservations au chargement de la page
+            document.querySelectorAll("#comments-section .container").forEach(function(container) {
+                container.style.display = "none";
+            });
+            document.getElementById("reservationTable").style.display = "block";
+            // Fonction pour filtrer les données
+            function filterData() {
+                var filter = document.getElementById("filterSelect").value;
+                // Masquer tous les tableaux et leurs titres
+                document.querySelectorAll("#comments-section .container").forEach(function(container) {
+                    container.style.display = "none";
+                });
+                // Afficher le titre et le tableau correspondant au filtre sélectionné
+                if (filter === 'reservation') {
+                    document.getElementById("reservationTable").style.display = "block";
+                    document.getElementById("reservationTitle").style.display = "block";
+                } else if (filter === 'deleted_cars') {
+                    document.getElementById("deletedCarsTable").style.display = "block";
+                    document.getElementById("deletedCarsTitle").style.display = "block";
+                } else if (filter === 'deleted_clients') {
+                    document.getElementById("deletedClientsTable").style.display = "block";
+                    document.getElementById("deletedClientsTitle").style.display = "block";
+                }
+            }
+            // Écouteur d'événements pour le changement de filtre
+            document.getElementById("filterSelect").addEventListener('change', filterData);
+        </script>
+
+        <script>
+            function search() {
+                // Récupérer la valeur saisie dans le champ de recherche
+                var searchText = document.getElementById("searchInput").value.toLowerCase();
+                // Récupérer les conteneurs des tableaux
+                var reservationTable = document.getElementById("reservationTable");
+                var deletedCarsTable = document.getElementById("deletedCarsTable");
+                var deletedClientsTable = document.getElementById("deletedClientsTable");
+                // Filtrer les lignes des tableaux en fonction du texte de recherche
+                filterTable(reservationTable, searchText);
+                filterTable(deletedCarsTable, searchText);
+                filterTable(deletedClientsTable, searchText);
+            }
+            function filterTable(table, searchText) {
+                // Récupérer les lignes du tableau
+                var rows = table.getElementsByTagName("tr");
+                // Parcourir les lignes du tableau à partir de l'index 1 pour exclure les balises <th>
+                for (var i = 1; i < rows.length; i++) {
+                    var row = rows[i];
+                    var displayStyle = "none"; // Par défaut, masquer la ligne
+                    // Parcourir les cellules de chaque ligne
+                    var cells = row.getElementsByTagName("td");
+                    for (var j = 0; j < cells.length; j++) {
+                        var cell = cells[j];
+                        // Vérifier si le texte de la cellule contient le texte de recherche
+                        if (cell.innerHTML.toLowerCase().indexOf(searchText) > -1) {
+                            displayStyle = ""; // Si trouvé, afficher la ligne
+                            break;
+                        }
+                    }
+                    // Appliquer le style d'affichage à la ligne
+                    row.style.display = displayStyle;
+                }
+            }
+        </script>
+
+
+    </body>
+</html>

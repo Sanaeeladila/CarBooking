@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboards.css') }}">
+        <script src="https://kit.fontawesome.com/1e94604817.js" crossorigin="anonymous"></script>   
+        <title>Manager_dashboard</title>
+    </head>
+    <body>
+        
+       <!-- SIDEBAR -->
+        <section id="sidebar">
+            <a class="brand" href="{{ url_for('index') }}">Car<span>Booking</span></a>
+
+            <ul class="side-menu top">
+                <li>
+                    <a href="{{ url_for('dashboard_manager') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Tableau de bord</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('cars') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Voitures</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="{{ url_for('clients') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Clients</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('add_reservation') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Ajout réservation</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('reservations') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Réservations</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('manager_history') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Historique</span>
+                    </a>
+                </li>
+            </ul>
+            <ul class="side-menu">
+                <li>
+                    <a href="{{ url_for('logout') }}" class="menu-item logout" data-target="settings-section">
+                        <span class="text" style="margin-left: 50px;">Se déconnecter</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+        <!-- SIDEBAR -->
+
+
+        <!-- CONTENT -->
+        <section id="content">
+            <!-- NAVBAR -->
+            <nav>
+                <form action="#" style="margin-left: 22%;">
+                </form>   
+            </nav>
+            <!-- NAVBAR -->
+
+            <!-- MAIN -->
+            <main>
+
+                <div id="message-section" class="section active">
+                    <h1 style="font-size: 24px; color: #333; margin-bottom: 20px; text-align:center;">Liste des clients</h1>
+
+                    <div style="display: flex; align-items: center; margin-left: 25px;">
+                        
+                        <p style="margin-right: 5px;">Ajouter un client</p>
+                        <a href="{{ url_for('add_client') }}" class="nav-link">
+                            <i class="fa-solid fa-circle-plus" id="addClientIcon" data-service="newClient" style="color: #000000; font-size: 27px; cursor: pointer;"></i>
+                        </a>
+                        <input type="text" id="searchInput" onkeyup="search()" placeholder="Rechercher un client..." style="width: 50%; padding: 10px; border: 1px solid #ccc; border-radius: 9px; margin-left: 90px;">
+
+                    </div> 
+                    <style>
+                        .card2 {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        padding: 15px;
+                        border: 1px solid #f3f3f4;
+                        border-radius: 10px;
+                        max-width: 255px;
+                        height: 270px;
+                        background-color: #f3f3f4;
+                        position: relative; 
+                        text-align: center;
+                        margin-left: 10px;
+                    }
+                    </style>  
+
+                    <div class="card-container">
+                        {% for client in clients %}
+                        <div class="card2 category-link"  data-service="review{{ loop.index }}">
+                            <p class="title_card1">{{ client.name }}</p>
+                            <pre class="parag_card1">{{ client.address }}</pre>
+                            <p class="title_card1">Contact</p>
+                            <p class="parag_card1">{{ client.email }}</p>
+                            <div style="display: flex; align-items: center;">
+                                <p class="parag_card1" >ID </p>
+                                <pre class="parag_card1" style="margin-left: 20px;">{{ client._id }}</pre>
+                            </div>
+                            <div style="display: flex; align-items: center;">
+                                <p class="parag_card1">CIN </p>
+                                <pre class="parag_card1" style="margin-left: 35px;">{{ client.CIN }}</pre>
+                            </div>
+                            <div style="display: flex; align-items: center;">
+                                <p class="parag_card1">Tel </p>
+                                <pre class="parag_card1" style="margin-left: 35px;">{{ client.phone }}</pre>
+                            </div>
+                            <div class="button-container" style="display: flex; align-items: center; margin-top:10px;">
+                                <a href="{{ url_for('modify_client', client_id=client._id) }}" class="nav-link"> 
+                                    <button  style="margin-right: 5px; background-color: #007bff; color: #fff; font-size: 14px; border-radius: 25px; padding: 8px 20px;">Modifier</button>
+                                </a>
+                                <button onclick="deleteClient('{{ client._id }}')" style="margin-right: 5px; margin-left: 5px; background-color: #6c757d; color: #fff; font-size: 14px; border-radius: 25px; padding: 8px 20px;">Supprimer</button>
+                            </div>                      
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                </div>
+
+            </main>
+        </section>
+        <!-- CONTENT -->
+
+        <script>
+            function search() {
+                // Récupérer la valeur de l'entrée de recherche
+                var input, filter, container, cards, card, i, title;
+                input = document.getElementById("searchInput");
+                filter = input.value.toUpperCase();
+                container = document.getElementsByClassName("card-container")[0];
+                cards = container.getElementsByClassName("card2");
+        
+                // Parcourir tous les éléments de la liste et masquer ceux qui ne correspondent pas à la recherche
+                for (i = 0; i < cards.length; i++) {
+                    card = cards[i];
+                    title = card.querySelector(".title_card1");
+                    if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                        card.style.display = "";
+                    } else {
+                        card.style.display = "none";
+                    }
+                }
+            }
+        </script>
+
+        <script>
+            function deleteClient(clientId) {
+                // Envoyer une demande AJAX pour mettre à jour l'état de l'utilisateur à "deleted"
+                fetch('/delete_client/' + clientId, {
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Recharger la page après la suppression
+                        window.location.reload();
+                    } else {
+                        console.error('Erreur lors de la mise à jour de l\'état du client.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur réseau :', error);
+                });
+            }
+        </script>
+                       
+    </body>
+</html>
+        

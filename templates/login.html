@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <script src="https://kit.fontawesome.com/1e94604817.js" crossorigin="anonymous"></script>
+    <style> 
+        body {
+            /* background-color: #9AC8CD   ; */
+            background-color: #e2e3e4   ;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background-color: #e2e3e4;
+            overflow: hidden;
+            margin-bottom: 55px;
+        }
+        .navbar a {
+            margin-left: 56px;
+            float: left;
+            display: block;
+            color: #ffffff; 
+            /* color: #000000; */
+            font-weight: 800;
+            font-size: 20px;
+            text-transform: uppercase;
+            text-align: center;
+            padding: 18px 16px;
+            margin-top: 19px;
+            text-decoration: none;
+            font-family: "Poppins", Arial, sans-serif;
+        }
+        .navbar a span {
+            color: #D3030F;
+        }
+        .container {
+            background-color: #e2e3e4;
+            border: 1.5px solid #000000;
+            padding: 17px;
+            width: 400px;
+            text-align: center;
+            margin: 0 auto; /* Center the container */
+        }
+        h2 {
+            margin-top: 0;
+            font-size: 56px;
+            font-family: "Noto Serif Japanese" , serif;
+            color: #000000 ;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            text-align: left;
+            margin-bottom: 8px;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="password"] {
+            width: 100%;
+            padding: 14px 20px;
+            border: 1.5px solid #000000;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            background-color: #D3030F;
+            color: #ffffff;
+            font-size: 20px;
+            font: bold;
+            padding: 14px 20px;
+            margin: 6px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+        .link:hover {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="{{ url_for('index') }}">CAR<span>Booking</span></a>
+    </div>
+
+        <div class="container">
+            <h2>Login</h2>
+            <form method="post" action="{{ url_for('login') }}">
+                <div class="form-group">
+                    <label for="email">EMAIL</label>
+                    <input type="text" id="email" name="email" placeholder="hello@gmail.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">PASSWORD</label>
+                    <input type="password" id="password" name="password" placeholder="******" required>
+                </div>
+                <input type="submit" value="Connexion">
+            </form>
+        </div>
+    
+</body>
+</html>

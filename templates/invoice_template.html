@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facture</title>
+    <style>
+
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        max-width: 900px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+      }
+      h1 {
+        text-align: center;
+        color: #D3030F;
+      }
+      .invoice-details {
+        margin-bottom: 20px;
+      }
+      .meter-photo {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .chart {
+        margin-bottom: 20px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+      table, th, td {
+        border: 1px solid #ccc;
+        padding: 15px;
+      }    
+      th {
+        background-color: #f2f2f2;
+      }
+    
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>FACTURE</h1> </br> </br>
+
+
+      <div class="invoice-details">
+        <p><strong>Id de Facture :</strong> {{ reservation_id }}</p>
+        <p><strong>Numéro du client :</strong> {{ client._id }}</p>
+        <p><strong>Nom du client :</strong> {{ client.name }}</p>
+        <p><strong>Adresse du client :</strong>  {{ client.address }}</p>
+        <p><strong>Date de début de réservation :</strong>  {{ start_date }}</p>
+        <p><strong>Date de fin de réservation :</strong> {{ end_date }}</p>
+      </div>
+
+      </br>
+      <table>
+        <tr>
+          <th>Marque</th>
+          <th>Modèle</th>
+          <th>Couleur</th>
+          <th>Durée (Jour)</th>
+          <th>Montant par jour (DH)</th>
+          <th>Montant Total (DH)</th>
+        </tr>
+        <tr>
+          <td>{{ car.brand }}</td>
+          <td>{{ car.model }}</td>
+          <td>{{ car.color }}</td>
+          <td>{{ num_days }}</td>
+          <td>{{ car.price }}</td>
+          <td>{{ total_price }}</td>
+        </tr>
+      </table>   </br> </br> </br> </br> 
+
+    </div>
+  </body>
+</html>

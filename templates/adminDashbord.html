@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboards.css') }}">
+        <title>Admin_dashboard</title>
+        <style >
+            #content main .box-info {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+                grid-gap: 24px;
+                margin-top: 36px;
+            }
+            #content main .box-info li {
+                padding: 24px;
+                background: var(--light);
+                border-radius: 20px;
+                display: flex;
+                align-items: center;
+                grid-gap: 24px;
+            }
+            #content main .box-info li .bx {
+                width: 80px;
+                height: 80px;
+                border-radius: 10px;
+                font-size: 36px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            #content main .box-info li:nth-child(1) .bx,
+            #content main .box-info li:nth-child(2) .bx,
+            #content main .box-info li:nth-child(3) .bx {
+                background: white;
+                color: #01d28e;
+            }
+            #content main .box-info li .text h3 {
+                font-size: 24px;
+                font-weight: 600;
+                color: var(--dark);
+            }
+            #content main .box-info li .text p {
+                color: var(--dark);	
+            }
+        </style>
+    </head>
+    <body>
+        
+        <!-- SIDEBAR -->
+        <section id="sidebar">
+
+            <a class="brand" href="{{ url_for('index') }}">Car<span>Booking</span></a>
+            
+            <ul class="side-menu top">
+                <li class="active">
+                    <a href="#" class="menu-item" data-target="dashboard-section">
+                        <span class="text" style="margin-left: 50px;">Tableau de bord</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('admin_view') }}" class="menu-item" data-target="clients-section">
+                        <span class="text" style="margin-left: 50px;">Voir Utilisateur</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('admin_add') }}" class="menu-item" data-target="reclamations-section">
+                        <span class="text" style="margin-left: 50px;">Ajouter Utilisateur</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('admin_delete') }}" class="menu-item" data-target="message-section">
+                        <span class="text" style="margin-left: 50px;">Supprimer Utilisateur</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('admin_history') }}" class="menu-item" data-target="comments-section">
+                        <span class="text" style="margin-left: 50px;">Historique</span>
+                    </a>
+                </li>
+            </ul>
+            <ul class="side-menu">
+                <li>
+                    <a href="{{ url_for('logout') }}" class="menu-item logout" data-target="settings-section">
+                        <span class="text" style="margin-left: 50px;">Se déconnecter</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+        <!-- SIDEBAR -->
+
+        <!-- CONTENT -->
+        <section id="content">
+            <!-- NAVBAR -->
+            <nav>
+                <form action="#" style="margin-left: 22%;">
+                </form>
+            </nav>
+            <!-- NAVBAR -->
+
+            <!-- MAIN -->
+            <main>
+                <div id="dashboard-section" class="section active">
+                    <h1 style="text-align:center;">Bienvenue sur votre tableau de bord</h1></br>
+
+                    <ul class="box-info">                      
+                        <li>
+                            <i class='bx bxs-calendar-check'></i>
+                            <span class="text">
+                                <h3>{{ session['admin_count'] }}</h3>
+                                <p>Nbr des admins</p>
+                            </span>
+                        </li>
+                        <li>
+                            <i class='bx bxs-group'></i>
+                            <span class="text">
+                                <h3>{{ session['manager_count'] }}</h3>
+                                <p>Nbr des managers</p>
+                            </span>
+                        </li>
+                    </ul>
+                    
+                    <div class="table-data">
+                        <div class="order"> </div>
+                    </div>
+                </div>                
+                
+            </main>
+        </section>
+        <!-- CONTENT -->
+
+    </body>
+</html>

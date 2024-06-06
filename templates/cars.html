@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboards.css') }}">
+        <script src="https://kit.fontawesome.com/1e94604817.js" crossorigin="anonymous"></script>
+        <title>Manager_dashboard</title>
+        <style>
+            .custom-img {
+                width: 272px;
+                height: 215px;
+            }
+            .card-container2 {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 20px; 
+                padding: 20px; 
+            }
+        </style>
+    </head>
+    <body>
+        
+        <!-- SIDEBAR -->
+        <section id="sidebar">
+            <a class="brand" href="{{ url_for('index') }}">Car<span>Booking</span></a>
+
+            <ul class="side-menu top">
+                <li>
+                    <a href="{{ url_for('dashboard_manager') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Tableau de bord</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="{{ url_for('cars') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Voitures</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('clients') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Clients</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('add_reservation') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Ajout réservation</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('reservations') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Réservations</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('manager_history') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Historique</span>
+                    </a>
+                </li>
+            </ul>
+            <ul class="side-menu">
+                <li>
+                    <a href="{{ url_for('logout') }}" class="menu-item logout" data-target="settings-section">
+                        <span class="text" style="margin-left: 50px;">Se déconnecter</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+        <!-- SIDEBAR -->
+
+        <!-- CONTENT -->
+        <section id="content">
+            <!-- NAVBAR -->
+            <nav>
+                <form action="#" style="margin-left: 22%;">
+                </form> 
+            </nav>
+            <!-- NAVBAR -->
+
+            <!-- MAIN -->
+            <main>
+                <!-- Autres sections de contenu -->
+                <div id="clients-section" class="section active">
+                    <h1 style="font-size: 24px; color: #333; margin-bottom: 5px; text-align:center;">Liste des voitures</h1> </br>
+
+                    <div style="display: flex; align-items: center; margin-left: 25px;">
+                        <p style="margin-right: 5px;">Ajouter une voiture</p>                      
+                        <a href="{{ url_for('add_car') }}" class="nav-link">
+                            <i class="fa-solid fa-circle-plus" id="addCarIcon" data-service="newCar" style="color: #000000; font-size: 27px; cursor: pointer;"></i>
+                        </a>
+                        <input type="text" id="searchInput" onkeyup="search()" placeholder="Rechercher une voiture..." style="width: 50%; padding: 10px; border: 1px solid #ccc; border-radius: 9px; margin-left: 90px;">
+                    </div>
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <ul>
+                            {% for message in messages %} </br>
+                                <li style="color:green; text-align: center;">{{ message }}</li>
+                            {% endfor %}
+                            </ul>
+                        {% endif %}
+                    {% endwith %}
+                
+                    <div class="card-container2" style="margin-left: 10px;">
+                        {% for car in cars %}
+                        <div class="col custom-col-width">
+                            <div class="car-wrap rounded ftco-animate">
+                                
+                                <div class="img rounded d-flex align-items-end">
+                                    <img src="{{ url_for('static', filename='images/' + car.image) }}" alt="Image de voiture"  class="custom-img" >
+                                </div>
+                                       
+                                <div class="text2">
+                                    <h2 class="mb-0">{{ car.brand }}</h2>
+                                    <div class="d-flex mb-3">
+                                        <span class="cat" style="color: #01d28e;">id:</span>
+                                        <span class="cat" style="margin-left: 15px; font-size: 12px;">{{ car._id }}</span>
+                                    </div>
+                                    <div class="d-flex mb-3">
+                                        <span class="cat" style="color: #01d28e;">Model:</span>
+                                        <span class="cat" style="margin-left: 40px;">{{ car.model }}</span>
+                                    </div>
+                                    <div class="d-flex mb-3">
+                                        <span class="cat" style="color: #01d28e;">Year:</span>
+                                        <span class="cat" style="margin-left: 55px;">{{ car.year }}</span>
+                                    </div>
+                                    <div class="d-flex mb-3">
+                                        <span class="cat" style="color: #01d28e;">Color:</span>
+                                        <span class="cat" style="margin-left: 52px;">{{ car.color }}</span>
+                                    </div>
+                                    <div class="d-flex mb-3">
+                                        <span class="cat" style="color: #01d28e;">Mileage:</span>
+                                        <span class="cat" style="margin-left: 32px;">{{ car.mileage }}</span>
+                                    </div>
+                                    <div class="d-flex mb-3">
+                                        <span class="cat" style="color: #01d28e;">Price:</span>
+                                        <span class="cat" style="margin-left: 50px;">{{ car.price }}</span>
+                                    </div>
+                                    <div class="d-flex mb-3">
+                                        <span class="cat" style="color: #01d28e;">Status:</span>
+                                        <span class="cat" style="margin-left: 40px;">{{ car.status }}</span>
+                                    </div></br>
+                                    <p class="d-flex mb-0 d-block">
+                                        <a href="{{ url_for('update_car', car_id=car._id) }}" class="btn btn-primary py-2 mr-1">Modifier</a> 
+                                        <a href="{{ url_for('delete_car', car_id=car._id) }}" class="btn btn-secondary py-2 ml-1">Supprimer</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </main>
+        </section>
+        <!-- CONTENT -->
+
+        <script>
+            function search() {
+                // Récupérer la valeur de l'input de recherche
+                var input = document.getElementById("searchInput");
+                var filter = input.value.toUpperCase();                
+                // Récupérer les éléments contenant les informations sur les voitures
+                var cards = document.getElementsByClassName("car-wrap");         
+                // Parcourir tous les éléments et afficher uniquement ceux qui correspondent à la recherche
+                for (var i = 0; i < cards.length; i++) {
+                    var text = cards[i].textContent || cards[i].innerText;
+                    if (text.toUpperCase().indexOf(filter) > -1) {
+                        cards[i].style.display = "";
+                    } else {
+                        cards[i].style.display = "none";
+                    }
+                }
+            }
+        </script>
+        
+    </body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboards.css') }}">
+        <script src="https://kit.fontawesome.com/1e94604817.js" crossorigin="anonymous"></script>       
+        <title>Manager_dashboard</title>
+        <style >
+            .section {
+                display: none;
+            }
+            .section.active {
+                display: block;
+            }
+            .button-group {
+                display: flex; /* Utiliser Flexbox pour aligner les boutons horizontalement */
+                align-items: center; /* Aligner les boutons verticalement au centre */
+            }
+            .button-group button {
+                margin-right: 10px; /* Ajouter un espacement entre les boutons */
+            }
+
+        </style>
+    </head>
+    <body>
+        
+        <!-- SIDEBAR -->
+        <section id="sidebar">
+            <a class="brand" href="{{ url_for('index') }}">Car<span>Booking</span></a>
+
+            <ul class="side-menu top">
+                <li>
+                    <a href="{{ url_for('dashboard_manager') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Tableau de bord</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('cars') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Voitures</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('clients') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Clients</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('add_reservation') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Ajout réservation</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="{{ url_for('reservations') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Réservations</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('manager_history') }}" class="nav-link">
+                        <span class="text" style="margin-left: 50px;">Historique</span>
+                    </a>
+                </li>
+            </ul>
+            <ul class="side-menu">
+                <li>
+                    <a href="{{ url_for('logout') }}" class="menu-item logout" data-target="settings-section">
+                        <span class="text" style="margin-left: 50px;">Se déconnecter</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+        <!-- SIDEBAR -->
+
+
+        <!-- CONTENT -->
+        <section id="content">
+            <!-- NAVBAR -->
+            <nav>
+                <form action="#" style="margin-left: 22%;">
+                </form>
+            </nav>
+            <!-- NAVBAR -->
+
+            <!-- MAIN -->
+            <main>
+
+                <div id="traitements-section" class="section active">
+                    <h1 style="font-size: 24px; color: #333; margin-bottom: 20px; text-align:center;">Traitement des réservations</h1>
+                    <div class="container">
+                        <table>
+                            <tr style="font-size: 13px;">
+                                <th>id_voiture </th>
+                                <th>id_client </th>
+                                <th>date_reservation </th>
+                                <th>debut_location</th>
+                                <th>fin_location</th>
+                                <th>Traitement</th>
+                            </tr>
+                            {% for reservation in reservations %}
+                            <tr>
+                                <td style="font-size: 13px;">{{ reservation.car_id }}</td>
+                                <td style="font-size: 13px;">{{ reservation.client_id }}</td>
+                                <td style="font-size: 13px;">{{ reservation.reservation_date }}</td>
+                                <td style="font-size: 13px;">{{ reservation.start_date }}</td>
+                                <td style="font-size: 13px;">{{ reservation.end_date }}</td>
+                                <td>
+                                    <div class="button-group">
+                                        <button onclick="acceptResrv('{{ reservation._id }}')" style="font-size: 13px;">Accepter</button>
+                                        <button onclick="refuseReservation('{{ reservation._id }}')" style="font-size: 13px; background-color: red;">Refuser</button>
+                                        
+                                        <!--
+                                            <button onclick="deleteResrv('{{ reservation._id }}')" style="font-size: 13px;  background-color: red;">Refuser</button>
+                                        -->
+                                
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}  
+                        </table>
+                    </div>
+                </div>
+
+            </main>
+        </section>
+        <!-- CONTENT -->
+
+        <script>
+            function refuseReservation(reservationId) {
+                var reason = prompt("Veuillez saisir le motif du refus :");
+            
+                // Vérifier si l'utilisateur a saisi une raison
+                if (reason !== null) {
+                    // Envoyer la raison au backend via une requête AJAX
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", "/refuseReservation", true);
+                    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                    xhr.onload = function () {
+                        if (xhr.status === 200) {
+                            // Réponse reçue avec succès
+                            alert("Raison de refus envoyée avec succès !");
+                        } else {
+                            // Gestion des erreurs
+                            alert("Erreur lors de l'envoi de la raison de refus.");
+                        }
+                    };
+                    xhr.onerror = function () {
+                        // Gestion des erreurs de connexion
+                        alert("Erreur de connexion lors de l'envoi de la raison de refus.");
+                    };
+                    xhr.send(JSON.stringify({ "reservationId": reservationId, "reason": reason }));
+                }
+            }
+        </script>
+
+        <script>
+            function deleteResrv(reservId) {
+                // Envoyer une demande AJAX pour mettre à jour l'état de la réservation à "refusée"
+                fetch('/delete_reserv/' + reservId, {
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Recharger la page après le refus de la réservation
+                        window.location.reload();
+                    } else {
+                        console.error('Erreur lors du refus de la réservation.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur réseau :', error);
+                });
+            }
+        </script>
+        
+        <script>
+            function acceptResrv(reservId) {
+                // Envoyer une demande AJAX pour mettre à jour l'état de la réservation à "validée"
+                fetch('/accept_reserv/' + reservId, {
+                    method: 'PUT'  // Utilisez la méthode PUT pour mettre à jour les données
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Recharger la page après l'acceptation de la réservation
+                        window.location.reload();
+                    } else {
+                        console.error('Erreur lors de l\'acceptation de la réservation.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur réseau :', error);
+                });
+            }
+        </script>
+    </body>
+</html>
+        
